@@ -1,4 +1,3 @@
-// implement your posts router here
 
 const Post = require('../posts/posts-model');
 
@@ -9,7 +8,7 @@ const router = require('express').Router()
 //const express = require('express)
 //const router = express.Router()
 
-router.get('/api/posts', (req, res) => {
+router.get('/', (req, res) => {
   Post.find(req.query)
     .then(posts => {
       res.status(200).json(posts);
