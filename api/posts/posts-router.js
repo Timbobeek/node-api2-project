@@ -45,13 +45,16 @@ router.get('/:id', (req, res) => {
 //--------------------POST---------------------------
 
 router.post('/', (req, res) => {
-  const post = req.body;
-  if(!post.title || !post.contents) {
+  const { title, contents} = req.body;
+  if(!title || !contents) {
     res.status(400).json({
       message: "Please provide title and contents for the post"
     })
   } else {
-    Post.insert(post)
+    Post.insert({title, contents})
+      .then(({id})=>{
+        return Post.findById(id)
+      })
       .then(newPost => {
         res.status(201).json(newPost)
       })
@@ -63,6 +66,7 @@ router.post('/', (req, res) => {
       })
   }
 })
+
 
 
 //--------------------GET w/ comments---------------------------
