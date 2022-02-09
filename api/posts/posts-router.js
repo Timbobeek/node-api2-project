@@ -67,6 +67,42 @@ router.post('/', (req, res) => {
   }
 })
 
+//--------------------PUT---------------------------
+
+router.put('/:id', (req, res) => {
+  const { title, contents} = req.body;
+  if(!title || !contents) {
+    res.status(400).json({
+      message: "Please provide title and contents for the post"
+    })
+  } else {
+    Post.findById(req.params.id)
+      .then(stuff=>{
+        if (!stuff){
+          res.status(404).json({
+            message: 'The post with the specified ID does not exist'
+          })
+        } else {
+          return Post.update(req.params.id, req.body)
+        }
+      })
+      .then(info => {
+        if (info) {
+          return Post.findById(req.params.id)
+        }
+      })
+      .then(post =>{
+        res.status(201).json(post)
+      })
+      .catch(err => {
+        res.status(500).json({
+          message: "There was an error while saving the post to the database",
+          error: err.message
+        })
+      })
+  }
+})
+
 
 
 //--------------------GET w/ comments---------------------------
